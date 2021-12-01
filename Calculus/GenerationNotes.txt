@@ -1,0 +1,4 @@
+Generating calculator based questions:
+1. Make polynomials without rational roots:
+  apply the rational root algorithm to determine if it has rational roots. If it does, change a coefficient. If it does not have any, use it.
+  
