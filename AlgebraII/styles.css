@@ -1,0 +1,11 @@
+a{
+    padding:10px
+}
+
+ol[type="A"] li{
+    padding:7px;
+    width:150px;
+}
+ol[type="A"] li:hover{
+    background:gray;
+}
