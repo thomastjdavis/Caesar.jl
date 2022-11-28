@@ -24,7 +24,7 @@ Here maxDegree is the maximum degree of the quotient.
 function divisionProblem(maxDegree)
     q = generatePolynomial(maxDegree)
     d = lesserDegreePolynomial(maxDegree)
-    r = generatePolynomial(d[2]-1)
+    r = lesserDegreePolynomial(d[2]-1)
 
     return (q,d,r)
 end
@@ -47,7 +47,6 @@ function printDivisionProblem(answersFileIO,quizFileIO)
     printpoly(answersFileIO,q,descending_powers=true,mulsymbol="")
     print(answersFileIO,",")
     printpoly(answersFileIO,r,descending_powers=true,mulsymbol="")
-    println(answersFileIO,",")
 end
 
 function printSyntheticDivision(answersFileIO,quizFileIO)
@@ -97,14 +96,13 @@ function printLastExample(answersFileIO,quizFileIO)
     printpoly(quizFileIO,prob[4],descending_powers=true,mulsymbol="")
     println(quizFileIO,"\\]\\makeemptybox{\\stretch{1}}")
 
-    print(answersFileIO,"$(prob[2])\&$(prob[3])")
+    print(answersFileIO,"$(prob[2])","$(prob[3])")
 end
 
 function questions(answers_file,quiz_file,n)
     answers_io = open(answers_file,"w");
     paper_io = open(quiz_file,"w");
-    
-    #header for the tex file
+
     println(paper_io,raw"""
     \documentclass{exam}
     \usepackage[utf8]{inputenc}
@@ -123,7 +121,6 @@ function questions(answers_file,quiz_file,n)
     \title{QUIZ 8 - RANDOMIZED}
     \begin{document}
     """)
-    println(answers_io,"ID,Q(x),R(x),r,z1+z2,z1*z2,z1//z2,z/z-bar");
     #makes questions and writes to the latex file, and the .csv file
     for i in 1:n
         
