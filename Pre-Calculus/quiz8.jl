@@ -1,40 +1,13 @@
 using Polynomials, Latexify
 
-A = setdiff(-5:5,[0])
-#need to use degree >= 1
-function generatePolynomial(degree)
-    degree= degree+1
-    if degree ==1
-        return Polynomial(rand(A,2));
-    end
-    notLeading = rand(-5:5,degree-1)
-    coefficients = append!(notLeading,rand(A))
-    return Polynomial(coefficients,:x)
-end
-
-function lesserDegreePolynomial(degree)
-
-    divisor_degree = rand(1:degree-1)
-    return (generatePolynomial(divisor_degree),divisor_degree)
-end
-
-#=
-Here maxDegree is the maximum degree of the quotient.
-=#
-function divisionProblem(maxDegree)
-    q = generatePolynomial(maxDegree)
-    d = lesserDegreePolynomial(maxDegree)
-    r = lesserDegreePolynomial(d[2]-1)
-
-    return (q,d,r)
-end
+include("./lib.jl")
 
 function printDivisionProblem(answersFileIO,quizFileIO)
     problem = divisionProblem(2)
     q=problem[1]
 
     d=problem[2][1]
-    r=problem[3]
+    r=problem[3][1]
 
     f = q*d+r
     println(quizFileIO,"\\question Calculate the following division:\\[\\dfrac{")
@@ -47,7 +20,7 @@ function printDivisionProblem(answersFileIO,quizFileIO)
     printpoly(answersFileIO,q,descending_powers=true,mulsymbol="")
     print(answersFileIO,",")
     printpoly(answersFileIO,r,descending_powers=true,mulsymbol="")
-    println(answersFileIO,",")
+    print(answersFileIO,",")
 end
 
 function printSyntheticDivision(answersFileIO,quizFileIO)
@@ -62,33 +35,12 @@ function printSyntheticDivision(answersFileIO,quizFileIO)
     print(answersFileIO,"$(f(a)),")
 end
 
-
-function complexEvaluation()
-    nums = rand(A,4)
-    z1= nums[1]+nums[2]im
-    z2=nums[3]+nums[4]im
-    if (z1==z2)
-        return complexEvaluation()
-    end
-    return (z1+z2,z1*z2,z1//z2,z1,z2)
-end
-
 function printComplexEvaluation(answersFileIO,quizFileIO)
     c=complexEvaluation()
     z1=latexify(c[4],env=:raw)
     z2=latexify(c[5],env=:raw)
     println(quizFileIO,"\\question Calculate \$z_1+z_2\$, \$z_1\\cdot z_2\$ and \$\\dfrac{z_1}{z_2}\$, where:\\[z_1=$(z1)\\]\\[z_2=$(z2)\\]\\makeemptybox{\\stretch{1}}")
     print(answersFileIO,"$(c[1]),$(c[2]),$(c[3]),")
-end
-
-function lastExample()
-    a=rand(A)
-    nums = rand(A,2)
-    z1= nums[1]+nums[2]im
-    z2=nums[1]-nums[2]im
-    p=fromroots([a,z1,z2])
-    return (a,z1,z2,p)
-    
 end
 
 function printLastExample(answersFileIO,quizFileIO)
