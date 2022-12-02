@@ -15,8 +15,7 @@ function lesserDegreePolynomial(degree)
         return (Polynomial(rand(A)),degree)
     end
     divisor_degree = rand(1:degree-1)
-    return (generatePolynomial(divisor_degree),divisor_degree)
-    
+    (generatePolynomial(divisor_degree),divisor_degree)
 end
 
 #=
@@ -27,7 +26,7 @@ function divisionProblem(maxDegree)
     q = lesserDegreePolynomial(maxDegree)
     r = lesserDegreePolynomial(d[2]-1)
     f=q[1]*d+r[1]
-    return (f,q,d,r)
+    (f,q,d,r)
 end
 
 function complexEvaluation()
@@ -37,7 +36,7 @@ function complexEvaluation()
     if (z1==z2)
         return complexEvaluation()
     end
-    return (z1+z2,z1*z2,z1//z2,z1,z2)
+    (z1+z2,z1*z2,z1//z2,z1,z2)
 end
 
 function cubicRoots()
@@ -46,6 +45,13 @@ function cubicRoots()
     z1= nums[1]+nums[2]im
     z2=nums[1]-nums[2]im
     p=fromroots([a,z1,z2])
-    return (a,z1,z2,p)
-    
+    (a,z1,z2,p)
+end
+
+function quarticRoots()
+    realRoots = rand(A,2)
+    nums= rand(A,2);
+    z1 = nums[1]+nums[2]im;
+    p = fromroots(union(realRoots,[z1,conj(z1)]));
+    (realRoots,z1,p)
 end
