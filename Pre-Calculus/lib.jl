@@ -1,4 +1,23 @@
+using Polynomials
 A = setdiff(-5:5,[0])
+
+function distinctRandom(Sampler,n)
+
+    if n>length(Sampler)
+        throw(BoundsError(Sampler,n))
+    end 
+    #base case of recursion
+    if n==1 
+        return rand(Sampler)
+    end
+    v=[]
+    for i in 1:n
+        new_sample=rand(setdiff(Sampler,v))
+        push!(v,new_sample)
+    end
+    v
+end
+    
 #need to use degree >= 1
 function generatePolynomial(degree)
     #degree= degree+1
@@ -39,15 +58,18 @@ function complexEvaluation()
     (z1+z2,z1*z2,z1//z2,z1,z2)
 end
 
+#generates a real polynomial with 1 conjugate pair of complex roots, and 1 real root
 function cubicRoots()
     a=rand(A)
     nums = rand(A,2)
     z1= nums[1]+nums[2]im
-    z2=nums[1]-nums[2]im
+    z2=conj(z1)
     p=fromroots([a,z1,z2])
     (a,z1,z2,p)
 end
 
+#generates a real polynomial with 1 conjugate pair of complex roots, and 2 real roots
+#real roots are not guaranteed to be unique
 function quarticRoots()
     realRoots = rand(A,2)
     nums= rand(A,2);
