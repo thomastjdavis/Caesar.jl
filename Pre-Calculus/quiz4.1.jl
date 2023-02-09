@@ -4,7 +4,7 @@
 -change header
 
 =#
-using Latexify
+using Latexify, Random
 
 include("equations.jl")
 # gives a problem with negative angle -2π<ϕ<0 and positive angle θ>360 degrees
@@ -67,6 +67,65 @@ converting between radians to degrees - x1
                    find coTerminal angle in range [0,2pi) given angle measure in radians - x1
                    '' '' in degrees - x1
 =#
+
+function practiceQuestions(answers_file,quiz_file,n)
+    answers_io = open(answers_file,"w");
+    paper_io = open(quiz_file,"w");
+
+    println(paper_io,raw"""
+    \documentclass{exam}
+    \usepackage[utf8]{inputenc}
+    \usepackage{amsmath}
+    \usepackage[shortlabels]{enumitem}
+    \usepackage{tikz}
+    \usepackage{multicol}
+    \graphicspath{{./graphs}}
+    \newcommand{\chinese}[1]{\begin{CJK}{UTF8}{gbsn}#1\end{CJK}}
+    \newcommand{\plane}[1][5]{
+        \draw[very thin,color=gray] (-{#1},-{#1}) grid ({#1},{#1});
+        \draw[thick,<->] (-{#1},0) -- ({#1},0) node[anchor=north west] {$x$};
+        \draw[thick,<->] (0,-{#1}) -- (0,{#1}) node[anchor=south west] {$y$};
+    }
+    \renewcommand{\choicelabel}{(\thechoice)}
+    \title{QUIZ 8 - RANDOMIZED}
+    \begin{document}
+    """)
+    #header for the csv file
+    println(answers_io,"ID,1,2,3,4,5a1,5a2,5b(supplement)");
+    #makes questions and writes to the latex file, and the .csv file
+    for i in 1:n
+        
+        paperID= i+100
+        #writing to csv file
+        print(answers_io,"$paperID,")
+
+        #writing to .tex file
+        println(paper_io,"\\section*{Practice Questions}")
+        println(paper_io,"\\subsection*{Sample ID: $paperID}")
+        print(paper_io,"\\begin{questions}\n")
+        expandLogsProblem(paper_io,answers_io)
+        expandLogsProblem(paper_io,answers_io)
+        logExtraSolution(paper_io,answers_io)
+        logExtraSolution(paper_io,answers_io)
+        println(paper_io,"\\newpage")
+        radianToDegree(paper_io,answers_io)
+        radianToDegree(paper_io,answers_io)
+        degreeToRadian(paper_io,answers_io)
+        degreeToRadian(paper_io,answers_io)
+        complementSupplementProblem(paper_io,answers_io)
+        complementSupplementProblem(paper_io,answers_io)
+        #new line
+        println(answers_io,"")
+        #new quiz
+        println(paper_io,"\\end{questions}\\newpage")
+    end
+
+    println(paper_io,"\\end{document}")
+    close(paper_io);
+    close(answers_io);
+    println("success!")
+
+end
 
 function questions(answers_file,quiz_file,n)
     answers_io = open(answers_file,"w");
