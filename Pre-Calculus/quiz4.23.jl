@@ -1,5 +1,6 @@
 using Latexify
 
+#can adapt to a unit circle triangle by picking x=s1/h, y =s2/h.
 function randomRightTriangle()
     s1 = rand(1:6)
     s2 = rand(setdiff(1:6,[s1]))
@@ -20,7 +21,11 @@ end
 
 function tikzRightTriangle()
     T = randomRightTriangle()
-    """\\draw (0,0) -- ($(T[1]),0) node[pos=0.5,anchor=north]{$(T[1])} node[pos=0.25,anchor=south]{\$\\theta\$} -- ($(T[1]),$(T[2])) node[pos=0.5,anchor=west]{$(T[2])} --(0,0) node[pos=0.4,anchor=south east]{\$$(T[3])\$};"""
+    # hiddenSide = rand(1:3)
+    tStrings = string.(T)
+    #randomly selects a side to hide
+    #replace!(tStrings,x-> x==hiddenSide ? "" : x)
+    """\\draw (0,0) -- ($(T[1]),0) node[pos=0.5,anchor=north]{$(tStrings[1])} node[pos=0.25,anchor=south]{\$\\theta\$} -- ($(T[1]),$(T[2])) node[pos=0.5,anchor=west]{$(tStrings[2])} --(0,0) node[pos=0.4,anchor=south east]{\$$(tStrings[3])\$};"""
 end
 
 function trial()
