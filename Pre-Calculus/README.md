@@ -17,6 +17,8 @@ generates a polynomial division problem where $d$ is the divisor, $q$ the quotie
 $$\dfrac{f(x)}{d(x)}=q(x)+\dfrac{r(x)}{d(x)}$$
 Or,
 $$f(x)=q(x)d(x) + r(x) $$
+(which is more useful for problem generation)
 
 In `Pre-Calculus/quiz*.jl` contains functions needed to generate latex code and .csv files for viewing of answer key. 
 These are *not* updated yet to reflect changes to lib.jl (some of which are breaking changes).
+
