@@ -98,4 +98,4 @@ function trial()
     run(compile)
 
 end
-trial()
+#trial()
