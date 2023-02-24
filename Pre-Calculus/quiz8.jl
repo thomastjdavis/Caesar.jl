@@ -1,6 +1,6 @@
 using Polynomials, Latexify
 
-include("./lib.jl")
+include("./polynomials.jl")
 
 function printDivisionProblem(answersFileIO,quizFileIO)
     problem = divisionProblem(2)
