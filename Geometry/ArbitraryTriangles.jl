@@ -54,9 +54,7 @@ function LSCaseI()
     includedSide = rand(1:3)
     givenAngles=[]
     for i in setdiff(1:3,[excludedAngle])
-        if i!==excludedAngle
             push!(givenAngles,(angleNames[i],v[i][1]))
-        end
     end
     givenSide = (sideNames[includedSide],v[includedSide][2])
     prompt= """Solve the triangle  ABC with $(length_splatt(givenSide)), angles $(angle_splatt(givenAngles[1])), and $(angle_splatt(givenAngles[2])). """
@@ -123,4 +121,23 @@ function LSCaseII(solution_size::Int64)
     data=([A,a],[b],[c])
     
     return (solution_size,data,prompt)
+end
+
+                
+function LCCaseI()
+    v=obliqueTriangle()
+    prompt = "Solve triangle ABC given A=$(nice(v[1][2])) units, B=$(nice(v[2][2])) units, C=$(nice(v[3][2])) units."
+    (v,prompt)
+end
+                
+function LCCaseII()
+    v=obliqueTriangle()
+    includedAngle = rand(1:3)
+    angleInfo = (angleNames[includedAngle],v[includedAngle][1])
+    givenSides=[]
+    for i in setdiff(1:3,[includedAngle])
+        push!(givenSides,(angleNames[i],v[i][1]))
+    end
+    prompt= "Solve triangle ABC given $(angle_splatt(angleInfo)), $(length_splatt(givenSides[1])), and $(length_splatt(givenSides[2]))"
+    return (v,prompt)
 end
