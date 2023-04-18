@@ -6,7 +6,7 @@ ArbitraryTriangles.jl contains functionality to make oblique triangles and probl
 
 `LSCaseI(), LSCaseII()` give information for a problem involving case I (AAS) or case II (SSA) of the Law of Sines. Law of Sines here:
 
-\[\dfrac{\sin A}{a}=\fdrac{\sin B}{b}=\dfrac{\sin C}{c}\]
+\[\dfrac{\sin A}{a}=\dfrac{\sin B}{b}=\dfrac{\sin C}{c}\]
 
 For reference, AAS guarantees a unique solution, because $180^{\circ}=a+b+c$ so you can always find the third angle.
 
