@@ -79,7 +79,7 @@ end
 =#
 function LSCaseII(solution_size::Int64)
     #TJ, please don't permute the names. Future TJ might murder you. 
-    c=rand(Lengths)
+    
     
     if solution_size==0
         A = rand(Angles)
@@ -111,12 +111,19 @@ function LSCaseII(solution_size::Int64)
         prompt = "Solve the triangle ABC with A=$(nice(A))^{\\circ},a=$(nice(a)) units, and b=$(nice(b)) units."
     else
         #two solutions
-        # forces b sin A < a < b (A acute)
-        A=rand(15:80)
-        b=rand(Lengths)
-        aMin = b*sind(A)+0.5
-        a = rand(range(aMin,aMin+4,step=0.3))
-        prompt = "Solve the triangle ABC with A=$(nice(A))^{\\circ},a=$(nice(a)) units, and b=$(nice(b)) units. There are two solutions."
+        # forces b/a>1, but (b/a)*sin A < 1 (A acute)
+        a = rand(Lengths)
+        b = rand(range(a+2,a+6,step=0.3)) 
+        angles = range(2,0.75*asind(a/b),length=20)
+        A = rand(angles)
+        B = asind((b/a)*sind(A))
+        C1=180-A-B
+        C2=180-A-(180-B)
+        c1= (a* sind(C1)/sind(a))
+        c2= (a* sind(C2)/sind(a))
+        solution1=[C1,c1]
+        solution2=[C2,c2]
+        c=[solution1,solution2]    
     end
     data=([A,a],[b],[c])
     
