@@ -79,8 +79,6 @@ end
 =#
 function LSCaseII(solution_size::Int64)
     #TJ, please don't permute the names. Future TJ might murder you. 
-    
-    
     if solution_size==0
         A = rand(Angles)
         a = rand(Lengths)
@@ -92,8 +90,12 @@ function LSCaseII(solution_size::Int64)
         if A>90
             b = rand(range(a,a+4,step=0.3))
         end
+        B=NaN
+        c=NaN
+        C=NaN
         prompt ="Show that there is no triangle ABC with \\angle A = $(nice(A))^{\\circ}, a=$(nice(a)) units, and b=$(nice(b)) units. "
-    elseif solution_size==1
+        data=([A,a],[B,b],[C,c])
+     elseif solution_size==1
         #=
         one solution:
         a=b sin A =h (A acute)
@@ -108,10 +110,14 @@ function LSCaseII(solution_size::Int64)
         else
             a = rand(range(b+0.5,b+4.5,step=0.3))
         end
+        B = asind( b/a * sind(A))
+        C = 180 - (A+B)
+        c = a*sind(C)/sind(A)
+        data=([A,a],[B,b],[C,c])
         prompt = "Solve the triangle ABC with A=$(nice(A))^{\\circ},a=$(nice(a)) units, and b=$(nice(b)) units."
     else
         #two solutions
-        # forces b/a>1, but (b/a)*sin A < 1 (A acute)
+        # forces b/a>1, but (b/a)*sin A < 1 and A acute
         a = rand(Lengths)
         b = rand(range(a+2,a+6,step=0.3)) 
         angles = range(2,0.75*asind(a/b),length=20)
@@ -119,13 +125,15 @@ function LSCaseII(solution_size::Int64)
         B = asind((b/a)*sind(A))
         C1=180-A-B
         C2=180-A-(180-B)
-        c1= (a* sind(C1)/sind(a))
-        c2= (a* sind(C2)/sind(a))
+        c1= (a* sind(C1)/sind(A))
+        c2= (a* sind(C2)/sind(A))
         solution1=[C1,c1]
         solution2=[C2,c2]
-        c=[solution1,solution2]    
+        solutions=[solution1,solution2]
+        data = ([A,a],[[B,b],[180-B,b]],solutions)
+        prompt="Solve the triangle ABC, given that \$A=$A^{\\circ}\$,\$a=$a\$ units, and \$b=$b\$ units. There are two solutions."                
     end
-    data=([A,a],[b],[c])
+    
     
     return (solution_size,data,prompt)
 end
