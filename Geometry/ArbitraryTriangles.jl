@@ -151,7 +151,7 @@ function LCCaseII()
     angleInfo = (angleNames[includedAngle],v[includedAngle][1])
     givenSides=[]
     for i in setdiff(1:3,[includedAngle])
-        push!(givenSides,(angleNames[i],v[i][1]))
+        push!(givenSides,(sideNames[i],v[i][1]))
     end
     prompt= "Solve triangle ABC given $(angle_splatt(angleInfo)), $(length_splatt(givenSides[1])), and $(length_splatt(givenSides[2]))"
     return (v,prompt)
