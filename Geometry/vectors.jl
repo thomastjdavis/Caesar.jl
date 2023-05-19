@@ -49,12 +49,12 @@ end
 function randomUnitVector()
     v = randomVector()
     h = sqrt((v[1])^2+(v[2])^2)
-    if isinteger(sqrt(h))
+    if isinteger(h)
         u = v.//h
         return string.(u)
     else
-        magnitude = norm(v)
-        return ("\$\\dfrac{$(v[1])}{\\sqrt{$magnitude}}","\\dfrac{$(v[2])}{\\sqrt{$magnitude}}\$")
+        magSquared = (norm(v))^2
+        return ("\$\\dfrac{$(v[1])}{\\sqrt{$magSquared}}","\\dfrac{$(v[2])}{\\sqrt{$magSquared}}\$")
     end
 end
 
