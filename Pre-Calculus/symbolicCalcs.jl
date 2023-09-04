@@ -1,6 +1,6 @@
 #=
 most of the setup time comes from loading SymEngine=#
-using SymEngine
+using SymEngine, Random, RationalGenerators, Polynomials
 
 x=symbols(:x)
 
@@ -25,7 +25,7 @@ function linearEval()
 
     bs3=subExpand(expr,badsub3)
     
-    (expr,sub,newexpr,[bs1,bs2,bs3])
+    (expr,sub,newexpr,[bs1,bs2,bs3],c)
 end
 
 function subExpand(expr,substitution)
@@ -44,7 +44,7 @@ function linearEvalProblem()
     j=1
     for i in 1:4
         if i==correctChoice
-            prompt = prompt*"\\choice"*string(l[3])
+            prompt = prompt*"\\choice\$"*string(l[3])*"\$"
         else
             prompt = prompt *"\\choice" *permutedAnswers[j]
             j=j+1
@@ -63,10 +63,43 @@ function slopePoint()
     slopes = collect(t for t in SmallRatGen(5) if t<1) 
     slope=rand(slopes)
     point=rand(setdiff(-5:5,[0,1]),2)
-    prompt="""Write an equation of a line passing through the point $(Tuple(point)) with slope \$m\$=$(latexify(slope))"""
+    prompt="""\\question Write an equation of a line passing through the point $(Tuple(point)) with slope \$m\$=$(latexify(slope))\\makeemptybox{\\stretch{1}}"""
     expr = expand(slope*(x-point[1])+point[2])
     expr=replace(string(expr),"*"=>"","("=>"",")"=>"","x"=>" x")
     (prompt,string("y=",expr))
 end
 
 #TO DO: make function "implicitMult","implicitMult!"
+
+"""
+    divideByZero()
+
+Uses Polynomials to generate a rational polynomial of degree 0,2  where the bottom excludes 
+the second and third output. The second and third output will be different. 
+Sample output:
+
+divideByZero()\n
+(Polynomial(20-9*x+x^2),4,5)
+"""
+function divideByZero()
+
+    a=rand(setdiff(-5:5,[0,1]))
+    b=rand(setdiff(-5:5,[0,1,a]))
+    expr=fromroots([a,b];var=:x)
+    (expr,a,b)
+end
+
+"""
+    divideByZeroDomainProblem(answersIO,quizIO)
+
+Directly uses answersIO, and quizIO to insert the question
+"""
+function divideByZeroDomainProblem(answersIO,quizIO)
+    d=divideByZero()
+    print(answersIO,"x\\ne $(d[2]), x\\ne$(d[3]),")
+    print(quizIO,"""\\question What is the domain of the following function:
+    \\[h(x)=\\dfrac{1}{""")
+    printpoly(quizIO,d[1],descending_powers=true,mulsymbol="")
+    print(quizIO,"""}\\]\\makeemptybox{\\stretch{1}}""")
+end
+
