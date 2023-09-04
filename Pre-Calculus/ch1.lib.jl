@@ -124,6 +124,8 @@ Linear Equations
     line from intecepts
 =#
 
+#=
+putting into symbolicCalcs
 function slopePoint()
     slopes = collect((t for t in SmallRatGen(5) if t<1))
     slope = rand(slopes)
@@ -131,7 +133,7 @@ function slopePoint()
     prompt = "Write an equation of a line passing through the point $(Tuple(point)) with slope \$m\$=$(latexify(slope))"
     slopeIntercept ="""\$y=$(latexify(slope))m$(niceForm(point[2]-slope*point[1])) \$"""
     return """$prompt    $slopeIntercept"""
-end
+end=#
 
 function cumcircle()
     data = midpointQuestion()
@@ -154,7 +156,53 @@ function linearExtrapolation()
     (slope,(x_minus1,fx_1),(x0,fx0),(x1,fx1),(newpoint,line(newpoint)))
 end
 
+function linearExtrapolationVectorized()
+    slopes = [t for t in RationalGenerator(10) if denominator(t)!=1]
+    slope = rand(slopes)
+    x0 = rand(setdiff(-5:5,[0]))
+    fx0 = rand(10:20)
+    function line(x)
+        slope*(x-x0)+fx0
+    end
+    x1 = x0+ denominator(slope)
+   fx1 = Int64(line(x1))
+    x_minus1 = x0-denominator(slope)
+    fx_1 = Int64(line(x_minus1))
+    newpoint = rand(setdiff((x_minus1+1):(x1-1),[x0]))
+    [slope,[[x_minus1,fx_1],[x0,fx0],[x1,fx1],[newpoint,line(newpoint)]]]
+end
 function linearExtrapolationQuestion()
     q=linearExtrapolation()
-    
+    table = """
+    \\begin{centering}
+    Use the following table to answer question 3.
+    \\end{centering}
+    \\begin{table}[h]
+        \\centering
+        \\resizebox{0.3\\textwidth}{!}{%
+            \\begin{tabular}{|l|l|l|l|}
+            \\hline
+            \\textbf{\$x\$}    & $(q[2][1])  & $(q[3][1])   & $(q[4][1])  \\\\ \\hline
+            \\textbf{\$f(x)\$} & $(q[2][2]) & $(q[3][2]) & $(q[4][2]) \\\\ \\hline
+            \\end{tabular}%
+            }
+    \\end{table} """
+    prompt="$table \n\\question If \$f(x)\$ is a linear function, what is the value of \$f($(q[5][1]))\$?\\makeemptybox{\\stretch{1}} "
+    (prompt,q[5][2])
 end
+
+function slopeFromPoints()
+    pair = distinctPoints()
+    slope = (pair[2][2]-pair[1][2])//(pair[2][1]-pair[1][1])
+    (pair,slope)
+end
+
+function slopeFromPointsQuestion()
+    data = slopeFromPoints()
+    prompt = """\\question Calculate the slope between the two points:
+    \\[p_1=$(Tuple(data[1][1]))\\]
+    \\[p_2=$(Tuple(data[1][2]))\\] 
+    \\makeemptybox{\\stretch{1}}"""
+    (prompt,data[2])
+end
+
