@@ -3,7 +3,7 @@ most of the setup time comes from loading SymEngine=#
 using SymEngine, Random, RationalGenerators, Polynomials
 
 x=symbols(:x)
-
+h=symbols(:h)
 function linearEval()
     a=rand(setdiff(-5:5,[0]))
     b=rand(setdiff(-5:5,[0,a]))
@@ -27,6 +27,7 @@ function linearEval()
     
     (expr,sub,newexpr,[bs1,bs2,bs3],c)
 end
+
 
 function subExpand(expr,substitution)
     expand(subs(expr,substitution))
@@ -102,4 +103,70 @@ function divideByZeroDomainProblem(answersIO,quizIO)
     printpoly(quizIO,d[1],descending_powers=true,mulsymbol="")
     print(quizIO,"""}\\]\\makeemptybox{\\stretch{1}}""")
 end
+"""
+    quadraticDifferenceQuotient()
 
+    Uses Polynomials.jl to compute with (f(x+h)-f(x))/h, giving the result of the difference quotient:
+    2ax+h+b.
+"""
+function quadraticDifferenceQuotient()
+    a=rand(setdiff(-5:5,[0]))
+    b=rand(setdiff(-5:5,[0,a]))
+    c=rand(setdiff(-5:5,[0,a,b]))
+    starting = Polynomial([c,b,a])
+    goalExpression=Polynomial([b+h,2a])
+    (starting,goalExpression)
+end
+"""
+    quadraticDifferenceQuotientProblem(answersIO,quizIO)
+
+    Uses quadraticDifferenceQuotient() as data for a difference quotient problem involving a quadratic function.
+    LaTeX code for the question is inserted into quizIO, and the answer into answersIO.
+
+    See ?quadraticDifferenceQuotient() for more details.
+
+"""
+function quadraticDifferenceQuotientProblem(answersIO,quizIO)
+    qdq=quadraticDifferenceQuotient()
+    print(quizIO,"\\question Recall the difference quotient of a function, 
+    \$f(x)\$:\\[\\dfrac{f(x+h)-f(x)}{h}\\]
+    Let \$h(x)=")
+    printpoly(quizIO,qdq[1],descending_powers=true,mulsymbol="")
+    print(quizIO,"\$. What is the difference quotient of \$h(x)\$?\\makeemptybox{\\stretch{1}} ")
+    printpoly(answersIO,qdq[2],descending_powers=true,mulsymbol="")
+    print(answersIO,",")
+end
+function averageRateOfChange()
+    x0=rand(-5:-1)
+    x1=rand(1:5)
+    a=rand(setdiff(2:5,[0]))
+    b=rand(setdiff(-5:5,[0,a]))
+
+    f = Polynomial([0,0,b,a])
+    Δy= f(x1)-f(x0)
+    Δx= x1-x0
+    if isinteger(Δy//Δx)
+        return (x0,x1,Int(Δy//Δx),f)
+    end
+    (x0,x1,Δy//Δx,f)
+end
+
+function averageRateOfChangeProblem(answersIO,quizIO)
+    data=averageRateOfChange()
+    print(quizIO,"\\question Find the average rate of change of \$g(x)=")
+    printpoly(quizIO,data[4],descending_powers=true,mulsymbol="")
+    print(quizIO,"\$ on \$x_1 = $(data[1])\$ to \$x_2=$(data[2])\$.\\makeemptybox{\\stretch{1}}")
+    print(answersIO,string(data[3],","))
+end
+
+
+"""
+    mobiusInversion()
+
+Creates a  mobius transformation f(x)=(ax+b)/(cx+d) such that ad-bc≠0.
+    Such a transformation is invertible and has a closed form solution for the inverse, ie:
+        f^{-1}(x)=(-dx+b)/(cx-a)
+"""
+function mobiusInversion()
+    #TO DO
+end
